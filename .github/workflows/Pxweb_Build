@@ -1,0 +1,46 @@
+name: Build PxWeb
+
+on:
+  workflow_dispatch:    # manual trigger from GitHub UI
+  #push:
+  #  branches: [ main ]  # optional: build on pushes to main
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v5        
+      with:
+        repository: statisticssweden/PxWeb
+        ref: "2025.v1"
+        submodules: true        
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2.0.0
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2
+
+    - name: Restore packages
+      run: nuget restore PCAxis.PX-Web.sln
+
+    - name: Build the application      
+      run: msbuild PCAxis.PX-Web.sln /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}\artifacts\PxWeb
+
+    - name: Print current folder path with PowerShell
+      shell: pwsh
+      run: |
+          Write-Output "Current folder path is: $PWD"          
+          
+    - name: Zip deployable package
+      shell: pwsh
+      run: |        
+        Compress-Archive -Path "artifacts\pxweb\_PublishedWebsites\*" -DestinationPath "PxWeb_Release.zip"
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PxWeb_Release
+        path: PxWeb_Release.zip
+        if-no-files-found: error
