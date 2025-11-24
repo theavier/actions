@@ -34,10 +34,10 @@ jobs:
       run: |
           Write-Output "Current folder path is: $PWD"          
           
-    - name: Zip deployable package
-      shell: pwsh
-      run: |        
-        Compress-Archive -Path "artifacts\pxweb\_PublishedWebsites\*" -DestinationPath "PxWeb_Release.zip"
+    #- name: Zip deployable package
+    #  shell: pwsh
+    #  run: |        
+    #    Compress-Archive -Path "artifacts\pxweb\_PublishedWebsites\*" -DestinationPath "PxWeb_Release.zip"
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
