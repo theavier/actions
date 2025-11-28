@@ -27,8 +27,8 @@ jobs:
       run: nuget restore PCAxis.PX-Web.sln
 
     - name: Build the application      
-      #run: msbuild PCAxis.PX-Web.sln /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}\artifacts\PxWeb
-      run: msbuild PXWeb\PXWeb.csproj /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}\artifacts\PxWeb
+      run: msbuild PCAxis.PX-Web.sln /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}\artifacts\PxWeb
+      #run: msbuild PXWeb\PXWeb.csproj /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}\artifacts\PxWeb
 
     - name: Print current folder path with PowerShell
       shell: pwsh
