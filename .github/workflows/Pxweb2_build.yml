@@ -40,6 +40,7 @@ jobs:
       shell: pwsh
       run: |
           Write-Output "Current folder path is: $PWD"          
+          Write-Output "Content get-childitem -path $PWD"
           
     #- name: Zip deployable package
     #  shell: pwsh
