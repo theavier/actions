@@ -41,7 +41,7 @@ jobs:
       run: |
           Write-Output "Current folder path is: $PWD"          
           Write-Output "Content get-childitem -path $PWD"
-          get-childitem -path $PWD
+          get-childitem -path $PWD -recurse
           
     #- name: Zip deployable package
     #  shell: pwsh
