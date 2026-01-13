@@ -16,28 +16,16 @@ jobs:
         repository: PxTools/PxWebApi
         ref: "v2.1.1"        
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v5
-      env:
-        DOTNET_INSTALL_DIR: ${{ runner.temp }}/.dotnet
-        DOTNET_ROOT: ${{ runner.temp }}/.dotnet
+    - name: Install Node
+      uses: actions/setup-node@v4
       with:
-        global-json-file: "./global.json"
+        node-version: 18
 
-    - name: Restore dependencies
-      run: dotnet restore
-
-    - name: Format code
-      run: dotnet format --severity error --no-restore --verify-no-changes --verbosity normal
+    - name: Install dependencies
+      run: npm install
 
     - name: Build the application
-      run: dotnet build --verbosity normal --no-restore --configuration Debug
-
-    - name: Execute unit tests
-      run: dotnet test --verbosity normal
-
-    - name: Publish for IIS
-      run: dotnet publish ./PxWebApi/PxWebApi.csproj -c Release -o ./publish
+      run: npm run build    
     
     - name: Print current folder path with PowerShell
       shell: pwsh
@@ -55,5 +43,5 @@ jobs:
       with:
         name: PxWeb_Release
         #path: PxWeb_Release.zip
-        path: ./publish
+        path: ./dist
         if-no-files-found: error
