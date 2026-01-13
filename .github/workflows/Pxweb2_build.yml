@@ -36,6 +36,9 @@ jobs:
     - name: Execute unit tests
       run: dotnet test --verbosity normal
 
+    - name: Publish for IIS
+      run: dotnet publish ./PxWebApi/PxWebApi.csproj -c Release -o ./publish
+    
     - name: Print current folder path with PowerShell
       shell: pwsh
       run: |
@@ -52,5 +55,5 @@ jobs:
       with:
         name: PxWeb_Release
         #path: PxWeb_Release.zip
-        path: PxWeb/
+        path: ./publish
         if-no-files-found: error
