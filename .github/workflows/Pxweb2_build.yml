@@ -41,6 +41,7 @@ jobs:
       run: |
           Write-Output "Current folder path is: $PWD"          
           Write-Output "Content get-childitem -path $PWD"
+          get-childitem -path $PWD
           
     #- name: Zip deployable package
     #  shell: pwsh
@@ -51,5 +52,5 @@ jobs:
       with:
         name: PxWeb_Release
         #path: PxWeb_Release.zip
-        path: artifacts/pxweb/_PublishedWebsites
+        path: release/wwwroot
         if-no-files-found: error
