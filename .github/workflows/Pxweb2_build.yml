@@ -1,0 +1,54 @@
+name: PxWeb2_Build
+
+on:
+  workflow_dispatch:    # manual trigger from GitHub UI
+  #push:
+  #  branches: [ main ]  # optional: build on pushes to main
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v5        
+      with:
+        repository: PxTools/PxWebApi
+        ref: "v2.1.1"        
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v5
+      env:
+        DOTNET_INSTALL_DIR: ${{ runner.temp }}/.dotnet
+        DOTNET_ROOT: ${{ runner.temp }}/.dotnet
+      with:
+        global-json-file: "./global.json"
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Format code
+      run: dotnet format --severity error --no-restore --verify-no-changes --verbosity normal
+
+    - name: Build the application
+      run: dotnet build --verbosity normal --no-restore --configuration Debug
+
+    - name: Execute unit tests
+      run: dotnet test --verbosity normal
+
+    - name: Print current folder path with PowerShell
+      shell: pwsh
+      run: |
+          Write-Output "Current folder path is: $PWD"          
+          
+    #- name: Zip deployable package
+    #  shell: pwsh
+    #  run: |        
+    #    Compress-Archive -Path "artifacts\pxweb\_PublishedWebsites\*" -DestinationPath "PxWeb_Release.zip"
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PxWeb_Release
+        #path: PxWeb_Release.zip
+        path: artifacts/pxweb/_PublishedWebsites
+        if-no-files-found: error
