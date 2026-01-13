@@ -13,8 +13,8 @@ jobs:
     - name: Checkout source
       uses: actions/checkout@v5        
       with:
-        repository: PxTools/PxWebApi
-        ref: "v2.1.1"        
+        repository: PxTools/PxWeb2
+        ref: "v2.4.0"        
 
     - name: Install Node
       uses: actions/setup-node@v4
