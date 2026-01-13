@@ -52,5 +52,5 @@ jobs:
       with:
         name: PxWeb_Release
         #path: PxWeb_Release.zip
-        path: release/wwwroot
+        path: PxWeb/
         if-no-files-found: error
