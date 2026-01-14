@@ -46,10 +46,10 @@ jobs:
     - name: Publish the application
       run: dotnet publish --runtime ${{ matrix.arch }} --output ./release PxWeb/PxWeb.csproj    
     
-    - name: Zip deployable package
-      shell: pwsh
-      run: |        
-        Compress-Archive -Path "release\wwwroot\Database\*" -DestinationPath "PxWebapi_${{ env.PXWEB2_VERSION }}.zip"
+    #- name: Zip deployable package
+    #  shell: pwsh
+    #  run: |        
+    #    Compress-Archive -Path "release\wwwroot\*" -DestinationPath "PxWebapi_${{ env.PXWEB2_VERSION }}.zip"
         
     - name: Print current folder path with PowerShell
       shell: pwsh
@@ -62,5 +62,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: PxWebapi_${{ env.PXWEB2_VERSION }}
-        path: PxWebapi_${{ env.PXWEB2_VERSION }}.zip        
+        path: release\wwwroot     
         if-no-files-found: error
