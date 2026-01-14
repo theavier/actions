@@ -1,0 +1,91 @@
+name: PxWeb2_Complete_Build
+
+on:
+  workflow_dispatch:    # manual trigger from GitHub UI
+  #push:
+  #  branches: [ main ]  # optional: build on pushes to main
+
+env:
+  PXWEB2_VERSION: "v2.4.0" 
+  PXWEBAPI_VERSION: "v2.1.1" 
+
+jobs:
+  build_nodejs:    
+    name: Building for ${{ matrix.label }}    
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        include: 
+          - arch: win-x64 
+            label: "Windows 64‑bit"
+    steps:
+    - name: Debug information
+      run: |
+        echo "PXWEB2_VERSION: ${{ env.PXWEB2_VERSION }}"        
+        
+    - name: Checkout source
+      uses: actions/checkout@v5        
+      with:
+        repository: PxTools/PxWeb2
+        ref: ${{ env.PXWEB2_VERSION }}       
+
+    - name: Install Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build the application
+      run: npm run build    
+               
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PxWeb2_${{ env.PXWEB2_VERSION }}        
+        path: packages\pxweb2\dist
+        if-no-files-found: error
+
+  build_dotnet:
+    name: Building for ${{ matrix.label }}
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        include: 
+          - arch: win-x64 
+            label: "Windows 64‑bit"    
+    steps:
+    - name: Debug information
+      run: |
+        echo "PXWEBAPI_VERSION: ${{ env.PXWEBAPI_VERSION }}"
+        
+    - name: Checkout source
+      uses: actions/checkout@v6        
+      with:
+        repository: PxTools/PxWebApi
+        ref: ${{ env.PXWEBAPI_VERSION }}       
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v5      
+      with:
+        global-json-file: "./global.json"
+
+    - name: Restore dependencies
+      run: dotnet restore --runtime ${{ matrix.arch }}
+
+    - name: Format code
+      run: dotnet format --severity error --no-restore --verify-no-changes --verbosity normal
+
+    - name: Build the application
+      run: dotnet build --no-restore --runtime ${{ matrix.arch }} PxWeb/PxWeb.csproj
+
+    - name: Publish the application
+      run: dotnet publish --runtime ${{ matrix.arch }} --output ./release PxWeb/PxWeb.csproj    
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PxWebapi_${{ env.PXWEBAPI_VERSION }}
+        path: release\    
+        if-no-files-found: error
