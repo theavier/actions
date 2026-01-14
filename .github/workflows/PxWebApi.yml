@@ -41,10 +41,7 @@ jobs:
       run: dotnet build --no-restore --runtime ${{ matrix.arch }} PxWeb/PxWeb.csproj
 
     - name: Publish the application
-      run: dotnet publish --runtime ${{ matrix.arch }} --output ./release PxWeb/PxWeb.csproj
-
-    - name: Create zip file
-      run: zip -x release/wwwroot/Database/\* -r pxwebapi-${{ env.TAG_NAME }}-${{ matrix.arch }}.zip ./release
+      run: dotnet publish --runtime ${{ matrix.arch }} --output ./release PxWeb/PxWeb.csproj    
     
     - name: Print current folder path with PowerShell
       shell: pwsh
@@ -54,14 +51,15 @@ jobs:
           #get-childitem -path $PWD -recurse
           get-childitem -path "packages\pxweb2\dist"
           
-    #- name: Zip deployable package
-    #  shell: pwsh
-    #  run: |        
-    #    Compress-Archive -Path "artifacts\pxweb\_PublishedWebsites\*" -DestinationPath "PxWeb_Release.zip"
+    - name: Zip deployable package
+      shell: pwsh
+      run: |        
+        Compress-Archive -Path "release\wwwroot\Database\*" -DestinationPath "./release/PxWebapi_${{ env.PXWEB2_VERSION }}.zip"
+        
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: PxWeb2_${{ env.PXWEB2_VERSION }}
-        #path: PxWeb_Release.zip
-        path: /release
+        name: PxWebapi_${{ env.PXWEB2_VERSION }}
+        path: PxWeb_${{ env.PXWEB2_VERSION }}.zip
+        #path: /release
         if-no-files-found: error
