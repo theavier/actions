@@ -33,7 +33,7 @@ jobs:
           Write-Output "Current folder path is: $PWD"          
           Write-Output "Content get-childitem -path $PWD"
           #get-childitem -path $PWD -recurse
-          get-childitem -path "packages\"
+          get-childitem -path "packages\pxweb2\dist"
           
     #- name: Zip deployable package
     #  shell: pwsh
@@ -44,5 +44,5 @@ jobs:
       with:
         name: PxWeb_Release
         #path: PxWeb_Release.zip
-        path: packages/
+        path: packages\pxweb2\dist
         if-no-files-found: error
