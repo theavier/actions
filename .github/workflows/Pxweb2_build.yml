@@ -9,8 +9,14 @@ env:
   PXWEB2_VERSION: "v2.4.0" 
 
 jobs:
-  build:
-    runs-on: windows-latest    
+  build:    
+    name: Building for ${{ matrix.label }}    
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        include: 
+          - arch: win-x64 
+            label: "Windows 64‑bit"
     steps:
     - name: Debug information
       run: |
@@ -41,14 +47,9 @@ jobs:
           #get-childitem -path $PWD -recurse
           get-childitem -path "packages\pxweb2\dist"
           
-    #- name: Zip deployable package
-    #  shell: pwsh
-    #  run: |        
-    #    Compress-Archive -Path "artifacts\pxweb\_PublishedWebsites\*" -DestinationPath "PxWeb_Release.zip"
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: PxWeb2_${{ env.PXWEB2_VERSION }}
-        #path: PxWeb_Release.zip
+        name: PxWeb2_${{ env.PXWEB2_VERSION }}        
         path: packages\pxweb2\dist
         if-no-files-found: error
