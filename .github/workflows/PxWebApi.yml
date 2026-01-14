@@ -46,18 +46,18 @@ jobs:
     - name: Publish the application
       run: dotnet publish --runtime ${{ matrix.arch }} --output ./release PxWeb/PxWeb.csproj    
     
-    - name: Print current folder path with PowerShell
-      shell: pwsh
-      run: |
-          Write-Output "Current folder path is: $PWD"                    
-          #get-childitem -path $PWD -recurse
-          #get-childitem -path "packages\pxweb2\dist"
-          
     - name: Zip deployable package
       shell: pwsh
       run: |        
         Compress-Archive -Path "release\wwwroot\Database\*" -DestinationPath "./release/PxWebapi_${{ env.PXWEB2_VERSION }}.zip"
         
+    - name: Print current folder path with PowerShell
+      shell: pwsh
+      run: |
+          Write-Output "Current folder path is: $PWD"                    
+          #get-childitem -path $PWD -recurse
+          get-childitem -path "./release"
+                
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
