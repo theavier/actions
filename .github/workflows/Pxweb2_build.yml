@@ -15,7 +15,7 @@ jobs:
     steps:
     - name: Debug information
       run: |
-        echo "PXWEB2_VERSION: $PXWEB2_VERSION"
+        echo "PXWEB2_VERSION: ${{ env.PXWEB2_VERSION }}"
         
     - name: Checkout source
       uses: actions/checkout@v5        
