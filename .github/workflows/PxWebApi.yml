@@ -60,6 +60,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: PxWebapi_${{ env.PXWEB2_VERSION }}
-        path: PxWeb_${{ env.PXWEB2_VERSION }}.zip
-        #path: /release
+        path: ./release/PxWeb_${{ env.PXWEB2_VERSION }}.zip        
         if-no-files-found: error
