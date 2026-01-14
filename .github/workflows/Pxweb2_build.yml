@@ -5,16 +5,23 @@ on:
   #push:
   #  branches: [ main ]  # optional: build on pushes to main
 
+env:
+  PXWEB2_VERSION: "v2.4.0" 
+
 jobs:
   build:
     runs-on: windows-latest
     
     steps:
+    - name: Debug information
+      run: |
+        echo "PXWEB2_VERSION: $PXWEB2_VERSION"
+        
     - name: Checkout source
       uses: actions/checkout@v5        
       with:
         repository: PxTools/PxWeb2
-        ref: "v2.4.0"        
+        ref: ${{ env.PXWEB2_VERSION }}       
 
     - name: Install Node
       uses: actions/setup-node@v4
@@ -42,7 +49,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: PxWeb_Release
+        name: PxWeb2_${{ env.PXWEB2_VERSION }}
         #path: PxWeb_Release.zip
         path: packages\pxweb2\dist
         if-no-files-found: error
