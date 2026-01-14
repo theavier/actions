@@ -32,8 +32,8 @@ jobs:
       run: |
           Write-Output "Current folder path is: $PWD"          
           Write-Output "Content get-childitem -path $PWD"
-          #get-childitem -path $PWD -recurse
-          get-childitem -path "packages\pxweb2-ui\dist"
+          get-childitem -path $PWD -recurse
+          #get-childitem -path "packages\pxweb2-ui\dist"
           
     #- name: Zip deployable package
     #  shell: pwsh
