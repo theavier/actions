@@ -47,10 +47,9 @@ jobs:
     - name: Print current folder path with PowerShell
       shell: pwsh
       run: |
-          Write-Output "Current folder path is: $PWD"          
-          Write-Output "Content get-childitem -path $PWD"
+          Write-Output "Current folder path is: $PWD"                    
           #get-childitem -path $PWD -recurse
-          get-childitem -path "packages\pxweb2\dist"
+          #get-childitem -path "packages\pxweb2\dist"
           
     - name: Zip deployable package
       shell: pwsh
