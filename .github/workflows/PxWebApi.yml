@@ -10,11 +10,13 @@ env:
 
 jobs:
   build:
-    name: Building for ${{ matrix.arch }}
+    name: Building for ${{ matrix.label }}
     runs-on: windows-latest
     strategy:
       matrix:
-        arch: [win-x64]
+        include: 
+          - arch: win-x64 
+            label: "Windows 64‑bit"
     
     steps:
     - name: Debug information
