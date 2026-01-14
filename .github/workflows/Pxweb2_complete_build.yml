@@ -2,12 +2,21 @@ name: PxWeb2_Complete_Build
 
 on:
   workflow_dispatch:    # manual trigger from GitHub UI
+    inputs:
+      PXWEB2_VERSION:
+        description: "Pxweb2 version"
+        required: true
+        default: "v2.4.0"
+      PXWEBAPI_VERSION: 
+        description: "PXWeb API version" 
+        required: true 
+        default: "v2.1.1"
   #push:
   #  branches: [ main ]  # optional: build on pushes to main
 
 env:
-  PXWEB2_VERSION: "v2.4.0" 
-  PXWEBAPI_VERSION: "v2.1.1" 
+  PXWEB2_VERSION: ${{ inputs.PXWEB2_VERSION }}
+  PXWEBAPI_VERSION: ${{ inputs.PXWEBAPI_VERSION }}
 
 jobs:
   build_nodejs:    
