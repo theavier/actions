@@ -20,7 +20,7 @@ env:
 
 jobs:
   build_nodejs:    
-    name: Building for ${{ matrix.label }}    
+    name: "Pxweb2 > Building [${{ matrix.label }}]"  
     runs-on: windows-latest
     strategy:
       matrix:
@@ -57,7 +57,7 @@ jobs:
         if-no-files-found: error
 
   build_dotnet:
-    name: Building for ${{ matrix.label }}
+    name: "PxwebAPI > Building [${{ matrix.label }}]"
     runs-on: windows-latest
     strategy:
       matrix:
