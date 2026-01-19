@@ -23,6 +23,14 @@ jobs:
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v2
 
+    - name: Install cloc
+      run: |
+        choco install cloc -y  # Windows
+         # or: sudo apt-get install cloc -y  # Linux
+
+    - name: Count lines of code
+      run: cloc . --exclude-dir=bin,obj,node_modules
+
     - name: Download SonarScanner for MSBuild 
       run: | 
         dotnet tool install --global dotnet-sonarscanner
@@ -52,10 +60,6 @@ jobs:
       run: | 
         dotnet-sonarscanner end ` /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           
-    #- name: Zip deployable package
-    #  shell: pwsh
-    #  run: |        
-    #    Compress-Archive -Path "artifacts\pxweb\_PublishedWebsites\*" -DestinationPath "PxWeb_Release.zip"
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
