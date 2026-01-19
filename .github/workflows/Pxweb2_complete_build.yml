@@ -43,6 +43,18 @@ jobs:
       with:
         node-version: 20
 
+    - name: Install SonarScanner
+      run: npm install -g sonar-scanner
+
+    - name: SonarCloud Scan
+      run: >
+        sonar-scanner 
+          -Dsonar.projectKey="${{ secrets.SONAR_PROJECT3 }}"
+          -Dsonar.organization="${{ secrets.SONAR_ORG }}" 
+          -Dsonar.sources=. 
+          -Dsonar.host.url=https://sonarcloud.io 
+          -Dsonar.login=${{ secrets.SONAR_TOKEN3 }}
+
     - name: Install dependencies
       run: npm install
 
@@ -87,6 +99,19 @@ jobs:
       with:
         repository: PxTools/PxWebApi
         ref: ${{ env.PXWEBAPI_VERSION }}       
+    
+    - name: Download SonarScanner for MSBuild 
+      run: | 
+        dotnet tool install --global dotnet-sonarscanner
+
+    - name: SonarCloud - Begin 
+      shell: pwsh
+      run: >      
+        dotnet-sonarscanner begin
+        /k:"${{ secrets.SONAR_PROJECT2 }}"
+        /o:"${{ secrets.SONAR_ORG }}"
+        /d:sonar.login="${{ secrets.SONAR_TOKEN2 }}"
+        /d:sonar.host.url="https://sonarcloud.io"
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v5      
@@ -106,6 +131,10 @@ jobs:
     - name: Publish the application
       #run: dotnet publish --runtime ${{ matrix.arch }} --output ./release PxWeb/PxWeb.csproj    
       run: dotnet publish --output ./release PxWeb.sln    
+
+    - name: SonarCloud - End 
+      run: | 
+        dotnet-sonarscanner end ` /d:sonar.login="${{ secrets.SONAR_TOKEN2 }}"
 
     - name: Generate SBOM with Anchore 
       uses: anchore/sbom-action@v0.17.0
