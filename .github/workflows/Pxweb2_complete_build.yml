@@ -54,7 +54,7 @@ jobs:
           "-Dsonar.organization=${{ secrets.SONAR_ORG }}"
           "-Dsonar.sources=."
           "-Dsonar.host.url=https://sonarcloud.io"
-          "-Dsonar.login=${{ secrets.SONAR_TOKEN3 }}"
+          "-Dsonar.token=${{ secrets.SONAR_TOKEN3 }}"
          ) 
          sonar-scanner @args
 
