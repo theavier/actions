@@ -48,7 +48,20 @@ jobs:
 
     - name: Build the application
       run: npm run build    
-               
+   
+    - name: Generate SBOM with Anchore 
+      uses: anchore/sbom-action@v0.15.0
+      with: 
+        path: . 
+        format: cyclonedx-json 
+        output-file: sbom.json
+
+    - name: Upload SBOM artifact 
+      uses: actions/upload-artifact@v4
+      with: 
+        name: pxweb2_sbom 
+        path: sbom.json
+        
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
@@ -93,7 +106,20 @@ jobs:
     - name: Publish the application
       #run: dotnet publish --runtime ${{ matrix.arch }} --output ./release PxWeb/PxWeb.csproj    
       run: dotnet publish --runtime ${{ matrix.arch }} --output ./release PxWeb.sln    
-    
+
+    - name: Generate SBOM with Anchore 
+      uses: anchore/sbom-action@v0.15.0
+      with: 
+        path: . 
+        format: cyclonedx-json 
+        output-file: sbom.json
+
+    - name: Upload SBOM artifact 
+      uses: actions/upload-artifact@v4
+      with: 
+        name: pxwebapi_sbom 
+        path: sbom.json
+        
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
