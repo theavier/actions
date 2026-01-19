@@ -108,7 +108,7 @@ jobs:
       run: dotnet publish --output ./release PxWeb.sln    
 
     - name: Generate SBOM with Anchore 
-      uses: anchore/sbom-action@v0.15.0
+      uses: anchore/sbom-action@v0.17.0
       with: 
         path: . 
         format: cyclonedx-json 
