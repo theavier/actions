@@ -47,13 +47,13 @@ jobs:
       run: npm install -g sonar-scanner
 
     - name: SonarCloud Scan
-      shell: bash
-      run: >
-        sonar-scanner 
-          -Dsonar.projectKey="${{ secrets.SONAR_PROJECT3 }}"
-          -Dsonar.organization="${{ secrets.SONAR_ORG }}" 
-          -Dsonar.sources=. 
-          -Dsonar.host.url=https://sonarcloud.io 
+      shell: pwsh
+      run: |
+        sonar-scanner `
+          -Dsonar.projectKey="${{ secrets.SONAR_PROJECT3 }}" `
+          -Dsonar.organization="${{ secrets.SONAR_ORG }}" `
+          -Dsonar.sources=. `
+          -Dsonar.host.url=https://sonarcloud.io `
           -Dsonar.login=${{ secrets.SONAR_TOKEN3 }}
 
     - name: Install dependencies
