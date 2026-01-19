@@ -48,13 +48,15 @@ jobs:
 
     - name: SonarCloud Scan
       shell: pwsh
-      run: |
-        sonar-scanner `
-          -Dsonar.projectKey="${{ secrets.SONAR_PROJECT3 }}" `
-          -Dsonar.organization="${{ secrets.SONAR_ORG }}" `
-          -Dsonar.sources=. `
-          -Dsonar.host.url=https://sonarcloud.io `
+      run: |        
+         $args = @(
+          -Dsonar.projectKey="${{ secrets.SONAR_PROJECT3 }}"
+          -Dsonar.organization="${{ secrets.SONAR_ORG }}"
+          -Dsonar.sources=.
+          -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.login=${{ secrets.SONAR_TOKEN3 }}
+         ) 
+         sonar-scanner @args
 
     - name: Install dependencies
       run: npm install
