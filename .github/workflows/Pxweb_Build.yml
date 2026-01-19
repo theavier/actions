@@ -23,14 +23,17 @@ jobs:
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v2
 
-    - name: SonarCloud - Prepare 
-      uses: SonarSource/sonarcloud-github-action@v2 
-      with: 
-        args: > 
-          begin 
-          /k:"theavier_pxweb" 
-          /o:"theavier" 
-          /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+    - name: Download SonarScanner for MSBuild 
+      run: | 
+        dotnet tool install --global dotnet-sonarscanner
+    
+    - name: SonarCloud - Begin 
+      run: |      
+        dotnet-sonarscanner begin `          
+          /k:"theavier_pxweb" `
+          /o:"theavier"  `
+          /d:sonar.login="${{ secrets.SONAR_TOKEN }}" ` 
+          /d:sonar.host.url="https://sonarcloud.io"
 
     - name: Restore packages
       run: nuget restore PCAxis.PX-Web.sln
@@ -44,11 +47,9 @@ jobs:
       run: |
           Write-Output "Current folder path is: $PWD"          
 
-    - name: SonarCloud - Analyze 
-      uses: SonarSource/sonarcloud-github-action@v2 
-      with: 
-        args: >
-          end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+    - name: SonarCloud - End 
+      run: | 
+        dotnet-sonarscanner end ` /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           
     #- name: Zip deployable package
     #  shell: pwsh
