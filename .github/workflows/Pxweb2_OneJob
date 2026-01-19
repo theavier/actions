@@ -1,0 +1,134 @@
+name: PxWeb2_Complete_Build
+
+on:
+  workflow_dispatch:    # manual trigger from GitHub UI
+    inputs:
+      PXWEB2_VERSION:
+        description: "Pxweb2 version"
+        required: true
+        default: "v2.4.0"
+      PXWEBAPI_VERSION: 
+        description: "PXWeb API version" 
+        required: true 
+        default: "v2.1.1"
+  #push:
+  #  branches: [ main ]  # optional: build on pushes to main
+
+env:
+  PXWEB2_VERSION: ${{ inputs.PXWEB2_VERSION }}
+  PXWEBAPI_VERSION: ${{ inputs.PXWEBAPI_VERSION }}
+
+jobs:
+  build_nodejs:    
+    name: "Pxweb2 > Building [${{ matrix.label }}]"  
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        include: 
+          - arch: win-x64 
+            label: "Windows 64‑bit"
+    steps:
+    - name: Debug information
+      run: |
+        echo "PXWEB2_VERSION: ${{ env.PXWEB2_VERSION }}"        
+        
+    - name: Checkout source
+      uses: actions/checkout@v5        
+      with:
+        repository: PxTools/PxWeb2
+        ref: ${{ env.PXWEB2_VERSION }}       
+
+    - name: Install Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build the application
+      run: npm run build    
+   
+    - name: Generate SBOM with Anchore 
+      uses: anchore/sbom-action@v0.17.0
+      with: 
+        path: . 
+        format: cyclonedx-json 
+        output-file: sbom_pxweb2.json
+
+    - name: Upload SBOM artifact 
+      uses: actions/upload-artifact@v4
+      with: 
+        name: sbom_pxweb2
+        path: sbom_pxweb2.json
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PxWeb2_${{ env.PXWEB2_VERSION }}        
+        path: packages\pxweb2\dist
+        if-no-files-found: error
+
+  build_dotnet:
+    name: "PxwebAPI > Building [${{ matrix.label }}]"
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        include: 
+          - arch: win-x64 
+            label: "Windows 64‑bit"    
+    steps:
+    - name: Debug information
+      run: |
+        echo "PXWEBAPI_VERSION: ${{ env.PXWEBAPI_VERSION }}"
+        
+    - name: Checkout source
+      uses: actions/checkout@v6        
+      with:
+        repository: PxTools/PxWebApi
+        ref: ${{ env.PXWEBAPI_VERSION }}       
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v5      
+      with:
+        global-json-file: "./global.json"
+
+    - name: Restore dependencies
+      run: dotnet restore --runtime ${{ matrix.arch }}
+
+    - name: Format code
+      run: dotnet format --severity error --no-restore --verify-no-changes --verbosity normal
+
+    - name: Build the application
+      #run: dotnet build --no-restore --runtime ${{ matrix.arch }} PxWeb/PxWeb.csproj
+      run: dotnet build --no-restore PxWeb.sln
+
+    - name: Publish the application
+      #run: dotnet publish --runtime ${{ matrix.arch }} --output ./release PxWeb/PxWeb.csproj    
+      run: dotnet publish --output ./release PxWeb.sln    
+
+    - name: Generate SBOM with Anchore 
+      uses: anchore/sbom-action@v0.17.0
+      with: 
+        path: . 
+        format: cyclonedx-json 
+        output-file: sbom_pxwebapi.json
+
+    - name: Upload SBOM artifact 
+      uses: actions/upload-artifact@v4
+      with: 
+        name: sbom_pxwebapi 
+        path: sbom_pxwebapi.json
+
+    #- name: Submit SBOM to GitHub
+    #  uses: actions/dependency-submission-action@v1
+    #  with:
+    #    sbom: sbom_pxwebapi.json
+
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PxWebapi_${{ env.PXWEBAPI_VERSION }}
+        path: release\    
+        if-no-files-found: error
