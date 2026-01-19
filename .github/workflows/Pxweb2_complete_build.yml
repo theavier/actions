@@ -152,10 +152,10 @@ jobs:
         name: sbom_pxwebapi 
         path: sbom_pxwebapi.json
 
-    #- name: Submit SBOM to GitHub
-    #  uses: actions/dependency-submission-action@v1
-    #  with:
-    #    sbom: sbom_pxwebapi.json
+    - name: Submit SBOM to GitHub
+      uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
+      with:
+        sbom: sbom_pxwebapi.json
 
         
     - name: Upload artifact
