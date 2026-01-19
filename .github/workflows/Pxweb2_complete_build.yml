@@ -47,6 +47,7 @@ jobs:
       run: npm install -g sonar-scanner
 
     - name: SonarCloud Scan
+      shell: pwsh
       run: >
         sonar-scanner 
           -Dsonar.projectKey="${{ secrets.SONAR_PROJECT3 }}"
