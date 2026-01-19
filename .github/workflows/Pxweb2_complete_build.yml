@@ -101,11 +101,11 @@ jobs:
 
     - name: Build the application
       #run: dotnet build --no-restore --runtime ${{ matrix.arch }} PxWeb/PxWeb.csproj
-      run: dotnet build --no-restore --runtime ${{ matrix.arch }} PxWeb.sln
+      run: dotnet build --no-restore PxWeb.sln
 
     - name: Publish the application
       #run: dotnet publish --runtime ${{ matrix.arch }} --output ./release PxWeb/PxWeb.csproj    
-      run: dotnet publish --runtime ${{ matrix.arch }} --output ./release PxWeb.sln    
+      run: dotnet publish --output ./release PxWeb.sln    
 
     - name: Generate SBOM with Anchore 
       uses: anchore/sbom-action@v0.15.0
