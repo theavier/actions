@@ -54,13 +54,13 @@ jobs:
       with: 
         path: . 
         format: cyclonedx-json 
-        output-file: sbom.json
+        output-file: sbom_pxweb2.json
 
     - name: Upload SBOM artifact 
       uses: actions/upload-artifact@v4
       with: 
-        name: pxweb2_sbom 
-        path: sbom.json
+        name: sbom_pxweb2
+        path: sbom_pxweb2.json
         
     - name: Upload artifact
       uses: actions/upload-artifact@v4
@@ -112,13 +112,19 @@ jobs:
       with: 
         path: . 
         format: cyclonedx-json 
-        output-file: sbom.json
+        output-file: sbom_pxwebapi.json
 
     - name: Upload SBOM artifact 
       uses: actions/upload-artifact@v4
       with: 
-        name: pxwebapi_sbom 
-        path: sbom.json
+        name: sbom_pxwebapi 
+        path: sbom_pxwebapi.json
+
+    - name: Submit SBOM to GitHub
+      uses: advanced-security/dependency-submission-action@v1
+      with:
+        sbom: sbom_pxwebapi.json
+
         
     - name: Upload artifact
       uses: actions/upload-artifact@v4
