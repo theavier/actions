@@ -111,7 +111,7 @@ jobs:
         dotnet-sonarscanner begin
         /k:"${{ secrets.SONAR_PROJECT2 }}"
         /o:"${{ secrets.SONAR_ORG }}"
-        /d:sonar.login="${{ secrets.SONAR_TOKEN2 }}"
+        /d:sonar.token="${{ secrets.SONAR_TOKEN2 }}"
         /d:sonar.host.url="https://sonarcloud.io"
 
     - name: Setup .NET
