@@ -121,7 +121,7 @@ jobs:
         path: sbom_pxwebapi.json
 
     - name: Submit SBOM to GitHub
-      uses: advanced-security/dependency-submission-action@v1
+      uses: github/dependency-submission-action@v2
       with:
         sbom: sbom_pxwebapi.json
 
