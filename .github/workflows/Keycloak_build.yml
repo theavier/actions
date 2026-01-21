@@ -44,7 +44,8 @@ jobs:
         
     - name: Print current folder path      
       run: |
-          echo "Current folder path is: $PWD"                            
+          echo "Current folder path is: $PWD"  \
+          find . -type f -name "*.zip" -o -name "*.tar.gz"
 
     - name: Run SonarCloud analysis             
       run: | 
