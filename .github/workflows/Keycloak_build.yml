@@ -42,8 +42,7 @@ jobs:
     - name: Build Keycloak (skip tests)       
       run: mvn -B install -DskipTests -Pdistribution
         
-    - name: Print current folder path with PowerShell
-      shell: bash
+    - name: Print current folder path      
       run: |
           echo "Current folder path is: $PWD"                            
 
