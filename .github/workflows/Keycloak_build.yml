@@ -60,6 +60,6 @@ jobs:
       with:
         name: Keycloak_${{ env.VERSION }}        
         path: |
-            distribution/server-dist/target/*.zip
-            distribution/server-dist/target/*.tar.gz
+            quarkus/dist/target/*.zip
+            quarkus/dist/target/*.tar.gz
         if-no-files-found: error
