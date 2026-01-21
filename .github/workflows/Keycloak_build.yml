@@ -43,7 +43,7 @@ jobs:
 
     - name: Build Keycloak (skip tests) 
       shell: pwsh 
-      run: mvn -B install -DskipTests
+      run: mvn -B install -DskipTests -Pdistribution
         
     - name: Print current folder path with PowerShell
       shell: pwsh
