@@ -21,6 +21,7 @@ jobs:
     - name: Debug information
       run: |
         echo "VERSION: ${{ env.VERSION }}"
+        echo "runner: ${{ runner.OS }}"
         
     - name: Checkout source
       uses: actions/checkout@v5        
@@ -41,6 +42,13 @@ jobs:
         java-version: 21 
         cache: maven
 
+    - name: Cache SonarCloud packages 
+      uses: actions/cache@v4 
+      with: 
+        path: ~/.sonar/cache 
+        key: ${{ runner.os }}-sonar 
+        restore-keys: ${{ runner.os }}-sonar
+
     - name: Build Keycloak (skip tests) 
       shell: pwsh 
       run: mvn -B install -DskipTests -Pdistribution
@@ -49,6 +57,15 @@ jobs:
       shell: pwsh
       run: |
           Write-Output "Current folder path is: $PWD"                            
+
+    - name: Run SonarCloud analysis       
+      shell: pwsh 
+      run: | 
+        mvn -B sonar:sonar `
+        -Dsonar.projectKey=${{ secrets.SONAR_PROJECT4 }} `
+        -Dsonar.organization=${{ secrets.SONAR_ORG }} `
+        -Dsonar.host.url=https://sonarcloud.io `
+        -Dsonar.login=${{ secrets.SONAR_TOKEN4 }}
           
     - name: Upload artifact
       uses: actions/upload-artifact@v4
