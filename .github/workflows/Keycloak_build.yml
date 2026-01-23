@@ -53,7 +53,7 @@ jobs:
         -Dsonar.projectKey=${{ secrets.SONAR_PROJECT4 }} \
         -Dsonar.organization=${{ secrets.SONAR_ORG }} \
         -Dsonar.host.url=https://sonarcloud.io \
-        -Dsonar.login=${{ secrets.SONAR_TOKEN4 }}
+        -Dsonar.token=${{ secrets.SONAR_TOKEN4 }}
           
     - name: Upload artifact
       uses: actions/upload-artifact@v4
