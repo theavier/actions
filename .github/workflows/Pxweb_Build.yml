@@ -66,22 +66,21 @@ jobs:
 
     - name: create upack 
       run: | 
-        mkdir -p package/content 
-        cp -r artifacts/pxweb/_PublishedWebsites/* package/content/ 
-        cp sbom_pxweb.json package/
-        cat <<EOF > package/upack.json 
-        { 
-          "name": "Pxweb", 
-          "version": "1.0.0", 
-          "description": "Test universal package", 
-          "authors": ["GitHub Actions"] 
-          } 
-          EOF 
+        New-Item -ItemType Directory -Path package\content -Force
+        Copy-Item -Path artifacts\pxweb\_PublishedWebsites\* -Destination package\content\ -Recurse
+        copy-item -path sbom_pxweb.json -destination package\        
+        @"
+          {
+            "name": "Pxweb",
+            "version": "1.0.0",
+            "description": "Test universal package",
+            "authors": ["GitHub Actions"]
+          }
+          "@ | Out-File -FilePath package\upack.json -Encoding utf8
 
     - name: Zip into .upack 
       run: | 
-        cd package 
-        zip -r ../pxweb-1.0.0.upack .
+        Compress-Archive -Path package\* -DestinationPath pxweb-1.0.0.upack        
         ls 
     
     - name: Print current folder path with PowerShell
