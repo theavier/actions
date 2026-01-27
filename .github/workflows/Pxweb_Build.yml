@@ -51,10 +51,24 @@ jobs:
       run: msbuild PCAxis.PX-Web.sln /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}\artifacts\PxWeb
       #run: msbuild PXWeb\PXWeb.csproj /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}\artifacts\PxWeb
 
+    - name: Generate SBOM with Anchore 
+      uses: anchore/sbom-action@v0.17.0
+      with: 
+        path: . 
+        format: cyclonedx-json 
+        output-file: sbom_pxweb.json
+
+    - name: Upload SBOM artifact 
+      uses: actions/upload-artifact@v4
+      with: 
+        name: sbom_pxweb
+        path: sbom_pxweb.json
+
     - name: create upack 
       run: | 
         mkdir -p package/content 
         cp -r artifacts/pxweb/_PublishedWebsites/* package/content/ 
+        cp sbom_pxweb.json package/
         cat <<EOF > package/upack.json 
         { 
           "name": "Pxweb", 
@@ -67,7 +81,8 @@ jobs:
     - name: Zip into .upack 
       run: | 
         cd package 
-        zip -r ../my-package-1.0.0.upack .
+        zip -r ../pxweb-1.0.0.upack .
+        ls 
     
     - name: Print current folder path with PowerShell
       shell: pwsh
@@ -84,4 +99,13 @@ jobs:
         name: PxWeb_Release
         #path: PxWeb_Release.zip
         path: artifacts/pxweb/_PublishedWebsites
+        if-no-files-found: error
+
+  
+    - name: Upload upack
+      uses: actions/upload-artifact@v4
+      with:
+        name: PxWeb_upack
+        #path: PxWeb_Release.zip
+        path: pxweb-1.0.0.upack
         if-no-files-found: error
