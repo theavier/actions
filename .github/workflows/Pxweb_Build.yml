@@ -51,6 +51,24 @@ jobs:
       run: msbuild PCAxis.PX-Web.sln /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}\artifacts\PxWeb
       #run: msbuild PXWeb\PXWeb.csproj /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}\artifacts\PxWeb
 
+    - name: create upack 
+      run: | 
+        mkdir -p package/content 
+        cp -r artifacts/pxweb/_PublishedWebsites/* package/content/ 
+        cat <<EOF > package/upack.json 
+        { 
+          "name": "Pxweb", 
+          "version": "1.0.0", 
+          "description": "Test universal package", 
+          "authors": ["GitHub Actions"] 
+          } 
+          EOF 
+
+    - name: Zip into .upack 
+      run: | 
+        cd package 
+        zip -r ../my-package-1.0.0.upack .
+    
     - name: Print current folder path with PowerShell
       shell: pwsh
       run: |
