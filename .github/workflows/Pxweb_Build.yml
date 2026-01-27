@@ -70,10 +70,10 @@ jobs:
         Copy-Item -Path artifacts\pxweb\_PublishedWebsites\* -Destination package\content\ -Recurse
         copy-item -path sbom_pxweb.json -destination package\        
         $json = @{
-            name: "Pxweb"
-            version: "1.0.0"
-            description: "Test universal package"
-            authors: @("GitHub Actions")
+            name= "Pxweb"
+            version= "1.0.0"
+            description= "Test universal package"
+            authors= @("GitHub Actions")
             } |convertto-json -depth 5
          $json | Out-File -FilePath package\upack.json -Encoding utf8
 
