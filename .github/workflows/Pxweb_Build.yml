@@ -69,14 +69,13 @@ jobs:
         New-Item -ItemType Directory -Path package\content -Force
         Copy-Item -Path artifacts\pxweb\_PublishedWebsites\* -Destination package\content\ -Recurse
         copy-item -path sbom_pxweb.json -destination package\        
-        @"
-          {
+        $json = @{
             "name": "Pxweb",
             "version": "1.0.0",
             "description": "Test universal package",
             "authors": ["GitHub Actions"]
-          }
-          "@ | Out-File -FilePath package\upack.json -Encoding utf8
+            } |convertto-json -depth 5
+         $json | Out-File -FilePath package\upack.json -Encoding utf8
 
     - name: Zip into .upack 
       run: | 
