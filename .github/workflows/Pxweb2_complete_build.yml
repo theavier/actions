@@ -66,7 +66,9 @@ jobs:
    
     - name: Install Syft
       run: |
-        curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+        curl.exe -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.ps1 -o install.ps1
+        .\install.ps1 -b . # Installs syft.exe into the current directory
+        echo "$PWD" >> $env:GITHUB_PATH  # For GitHub Actions
         
     - name: Generate SBOM
       run: |
@@ -142,7 +144,9 @@ jobs:
 
     - name: Install Syft
       run: |
-        curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+         curl.exe -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.ps1 -o install.ps1
+         .\install.ps1 -b . # Installs syft.exe into the current directory
+         echo "$PWD" >> $env:GITHUB_PATH  # For GitHub Actions
         
     - name: Generate SBOM
       run: |
