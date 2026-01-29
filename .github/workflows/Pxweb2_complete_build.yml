@@ -64,13 +64,14 @@ jobs:
     - name: Build the application
       run: npm run build    
    
-    - name: Generate SBOM with Anchore 
-      uses: anchore/sbom-action@v0.17.0
-      with: 
-        path: . 
-        format: cyclonedx-json 
-        output-file: sbom_pxweb2.json
-
+    - name: Install Syft
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+        
+    - name: Generate SBOM
+      run: |
+        syft . --output cyclonedx-json=sbom_pxweb2.json--source-name Pxweb2 --source-version ${{ env.PXWEB2_VERSION }}    
+      
     - name: Upload SBOM artifact 
       uses: actions/upload-artifact@v4
       with: 
@@ -139,23 +140,24 @@ jobs:
       run: | 
         dotnet-sonarscanner end ` /d:sonar.login="${{ secrets.SONAR_TOKEN2 }}"
 
-    - name: Generate SBOM with Anchore 
-      uses: anchore/sbom-action@v0.17.0
-      with: 
-        path: . 
-        format: cyclonedx-json 
-        output-file: sbom_pxwebapi.json
-
+    - name: Install Syft
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+        
+    - name: Generate SBOM
+      run: |
+        syft . --output cyclonedx-json=sbom_pxwebapi.json--source-name Pxwebapi --source-version ${{ env.PXWEBAPI_VERSION }}   
+        
     - name: Upload SBOM artifact 
       uses: actions/upload-artifact@v4
       with: 
         name: sbom_pxwebapi 
         path: sbom_pxwebapi.json
 
-    - name: Submit SBOM to GitHub
-      uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
-      with:
-        sbom: sbom_pxwebapi.json
+    #- name: Submit SBOM to GitHub
+    #  uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
+    #  with:
+    #    sbom: sbom_pxwebapi.json
 
         
     - name: Upload artifact
