@@ -144,7 +144,7 @@ jobs:
 
     - name: Install Syft
       run: |
-         curl.exe -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.ps1 -o install.ps1
+         curl.exe -sSfL https://get.anchore.io/syft -o install.ps1
          .\install.ps1 -b . # Installs syft.exe into the current directory
          echo "$PWD" >> $env:GITHUB_PATH  # For GitHub Actions
         
