@@ -90,7 +90,7 @@ jobs:
     - name: Print current folder path with PowerShell
       shell: pwsh
       run: |
-          Write-Output "Current folder path is: $PWD"
+          Write-Output "Current folder path is: $(PWD)"
           get-childitem -recurse
           
     - name: create upack 
