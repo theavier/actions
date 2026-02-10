@@ -59,7 +59,10 @@ jobs:
 
     - name: Copy all solution DLLs into publish folder # trying to force all dlls to be included.
       run: |
-        Get-ChildItem -Path "${{ github.workspace }}" -Recurse -Filter *.dll | Copy-Item -Destination "${{ github.workspace }}\artifacts\PxWeb\bin" -Force
+        $dest = "${{ github.workspace }}\artifacts\PxWeb\bin"
+        Get-ChildItem -Path "${{ github.workspace }}" -Recurse -Filter *.dll |
+        Where-Object { $_.FullName -notlike "$dest*" } |
+        Copy-Item -Destination $dest -Force
 
     - name: Generate SBOM with Anchore 
       uses: anchore/sbom-action@v0.17.0
