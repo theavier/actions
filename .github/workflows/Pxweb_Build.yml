@@ -55,7 +55,7 @@ jobs:
       #run: msbuild PXWeb\PXWeb.csproj /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}\artifacts\PxWeb
 
     - name: Build the application publishweb           
-      run: msbuild PXWeb\PXWeb.csproj /p:Configuration=Release /p:WebPublishMethod=FileSystem /p:PublishUrl=artifacts\PxWeb /t:WebPublish  /p:PreBuildEvent="skipping prebuild"
+      run: msbuild PXWeb\PXWeb.csproj /p:Configuration=Release /p:WebPublishMethod=FileSystem /p:PublishUrl=artifacts\PxWeb /t:WebPublish  /p:SolutionDir="${{ github.workspace }}\"
 
     - name: Generate SBOM with Anchore 
       uses: anchore/sbom-action@v0.17.0
