@@ -85,7 +85,14 @@ jobs:
       with: 
         name: sbom_pxweb2
         path: sbom_pxweb2.json
-        
+
+
+    - name: Print current folder path with PowerShell
+      shell: pwsh
+      run: |
+          Write-Output "Current folder path is: $PWD"
+          get-childitem -recurse
+          
     - name: create upack 
       run: | 
         New-Item -ItemType Directory -Path package\content -Force        
@@ -104,10 +111,7 @@ jobs:
         Compress-Archive -Path package\* -DestinationPath pxweb-1.0.0.upack        
         ls 
     
-    - name: Print current folder path with PowerShell
-      shell: pwsh
-      run: |
-          Write-Output "Current folder path is: $PWD"          
+          
 
     - name: SonarCloud - End 
       run: | 
