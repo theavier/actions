@@ -1,0 +1,37 @@
+name: PxWeb_Build_Json_Controls
+
+on:
+  workflow_dispatch:    # manual trigger from GitHub UI
+  #push:
+  #  branches: [ main ]  # optional: build on pushes to main
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v5        
+      with:
+        repository: statisticssweden/PxWeb
+        ref: "2025.v1"
+        submodules: true        
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2.0.0
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2
+
+    - name: Restore packages
+      run: nuget restore PX.Json.Web.Controls\PX.Json.Web.Controls.csproj
+      
+    - name: Build the application      
+      run: msbuild PX.Json.Web.Controls\PX.Json.Web.Controls.csproj /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}\artifacts\PxWeb 
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PxWeb_Release        
+        path: artifacts/PxWeb
+        if-no-files-found: error
