@@ -49,8 +49,8 @@ jobs:
 
     - name: Build the application      
       #run: msbuild PCAxis.PX-Web.sln /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}\artifacts\PxWeb # works
-      #run: msbuild PCAxis.PX-Web.sln /p:Configuration=Release /p:WebPublishMethod=FileSystem /p:PublishUrl=artifacts\PxWeb /t:WebPublish #failed
-      run: msbuild PXWeb\PXWeb.csproj /p:Configuration=Release /p:WebPublishMethod=FileSystem /p:PublishUrl=artifacts\PxWeb /t:WebPublish  /p:PreBuildEvent=false
+      run: msbuild PCAxis.PX-Web.sln /p:Configuration=Release /p:WebPublishMethod=FileSystem /p:PublishUrl=artifacts\PxWeb /t:WebPublish #failed
+      #run: msbuild PXWeb\PXWeb.csproj /p:Configuration=Release /p:WebPublishMethod=FileSystem /p:PublishUrl=artifacts\PxWeb /t:WebPublish  /p:PreBuildEvent=false #failed
       #run: msbuild PXWeb\PXWeb.csproj /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}\artifacts\PxWeb
 
     - name: Generate SBOM with Anchore 
