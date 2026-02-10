@@ -24,7 +24,7 @@ jobs:
       uses: NuGet/setup-nuget@v2
 
     - name: Restore packages
-      run: nuget restore PX.Json.Web.Controls\PX.Json.Web.Controls.csproj
+      run: nuget restore PCAxis.PX-Web.sln
       
     - name: Build the application      
       run: msbuild PX.Json.Web.Controls\PX.Json.Web.Controls.csproj /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}\artifacts\PxWeb 
