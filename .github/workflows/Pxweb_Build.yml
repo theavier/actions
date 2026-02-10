@@ -57,6 +57,10 @@ jobs:
     - name: Build the application publishweb           
       run: msbuild PXWeb\PXWeb.csproj /p:Configuration=Release /p:WebPublishMethod=FileSystem /p:PublishUrl=${{ github.workspace }}\artifacts\PxWeb /t:WebPublish  /p:SolutionDir="${{ github.workspace }}\"
 
+    - name: Copy all solution DLLs into publish folder # trying to force all dlls to be included.
+      run: |
+        Get-ChildItem -Path "${{ github.workspace }}" -Recurse -Filter *.dll | Copy-Item -Destination "${{ github.workspace }}\artifacts\PxWeb\bin" -Force
+
     - name: Generate SBOM with Anchore 
       uses: anchore/sbom-action@v0.17.0
       with: 
