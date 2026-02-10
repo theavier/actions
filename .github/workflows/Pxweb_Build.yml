@@ -88,8 +88,8 @@ jobs:
         
     - name: create upack 
       run: | 
-        New-Item -ItemType Directory -Path package\content -Force
-        Copy-Item -Path artifacts\pxweb\_PublishedWebsites\* -Destination package\content\ -Recurse
+        New-Item -ItemType Directory -Path package\content -Force        
+        Copy-Item -Path artifacts\pxweb\* -Destination package\content\ -Recurse
         copy-item -path sbom_pxweb.json -destination package\        
         $json = @{
             name= "Pxweb"
@@ -118,7 +118,8 @@ jobs:
       with:
         name: PxWeb_Release
         #path: PxWeb_Release.zip
-        path: artifacts/pxweb/_PublishedWebsites
+        #path: artifacts/pxweb/_PublishedWebsites
+        path: artifacts/pxweb
         if-no-files-found: error
 
   
