@@ -115,6 +115,7 @@ jobs:
           get-childitem -recurse
           
     - name: create upack 
+      if: ${{ inputs.SKIPSEC == 'true' }}
       run: | 
         New-Item -ItemType Directory -Path package\content -Force        
         Copy-Item -Path artifacts\pxweb\* -Destination package\content\ -Recurse
@@ -128,6 +129,7 @@ jobs:
          $json | Out-File -FilePath package\upack.json -Encoding utf8
 
     - name: Zip into .upack 
+      if: ${{ inputs.SKIPSEC == 'true' }}
       run: | 
         Compress-Archive -Path package\* -DestinationPath pxweb-1.0.0.upack        
         ls 
