@@ -4,7 +4,7 @@ on:
   workflow_dispatch:    # manual trigger from GitHub UI
     inputs:
       SKIPSEC:
-        description: "Skip security checks"        
+        description: "Run security checks"        
         type: boolean
         default: true
   #push:
