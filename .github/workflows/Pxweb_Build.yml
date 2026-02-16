@@ -62,7 +62,7 @@ jobs:
         $dest = "${{ github.workspace }}\artifacts\PxWeb\bin"
         Get-ChildItem -Path "${{ github.workspace }}" -Recurse -Filter *.dll |
         Where-Object { $_.FullName -notlike "$dest*" } |
-        Copy-Item -Destination $dest -Force
+        Copy-Item -Destination $dest
 
     - name: Generate SBOM with Anchore 
       uses: anchore/sbom-action@v0.17.0
@@ -133,6 +133,12 @@ jobs:
         path: artifacts/pxweb
         if-no-files-found: error
 
+    - name: Upload  github.workspace
+      uses: actions/upload-artifact@v4
+      with:
+        name: PxWeb_workspace              
+        path:  ${{ github.workspace }}
+        if-no-files-found: error
   
     - name: Upload upack
       uses: actions/upload-artifact@v4
@@ -141,3 +147,6 @@ jobs:
         #path: PxWeb_Release.zip
         path: pxweb-1.0.0.upack
         if-no-files-found: error
+
+
+       
