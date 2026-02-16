@@ -2,6 +2,11 @@ name: PxWeb_Build
 
 on:
   workflow_dispatch:    # manual trigger from GitHub UI
+    inputs:
+      SKIPSEC:
+        description: "Skip security checks"        
+        type: boolean
+        default: true
   #push:
   #  branches: [ main ]  # optional: build on pushes to main
 
@@ -24,18 +29,22 @@ jobs:
       uses: NuGet/setup-nuget@v2
 
     - name: Install cloc
+      if: ${{ inputs.SKIPSEC == 'true' }}
       run: |
         choco install cloc -y  # Windows
          # or: sudo apt-get install cloc -y  # Linux
 
     - name: Count lines of code
+      if: ${{ inputs.SKIPSEC == 'true' }}
       run: cloc . --exclude-dir=bin,obj,node_modules
 
     - name: Download SonarScanner for MSBuild 
+      if: ${{ inputs.SKIPSEC == 'true' }}
       run: | 
         dotnet tool install --global dotnet-sonarscanner
     
     - name: SonarCloud - Begin 
+      if: ${{ inputs.SKIPSEC == 'true' }}
       shell: pwsh
       run: >      
         dotnet-sonarscanner begin
@@ -65,6 +74,7 @@ jobs:
         Copy-Item -Destination $dest
 
     - name: Generate SBOM with Anchore 
+      if: ${{ inputs.SKIPSEC == 'true' }}
       uses: anchore/sbom-action@v0.17.0
       with: 
         path: . 
@@ -74,20 +84,24 @@ jobs:
         
 
     - name: Upload SBOM artifact 
+      if: ${{ inputs.SKIPSEC == 'true' }}
       uses: actions/upload-artifact@v4
       with: 
         name: sbom_pxweb
         path: sbom_pxweb.json
 
     - name: Install Syft
+      if: ${{ inputs.SKIPSEC == 'true' }}
       run: |
         curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
 
     - name: Generate CycloneDX SBOM
+      if: ${{ inputs.SKIPSEC == 'true' }}
       run: |
         syft . --output cyclonedx-json=sbom_pxweb2.json --source-name Pxweb --source-version 1.1.0
 
     - name: Upload SBOM artifact 2
+      if: ${{ inputs.SKIPSEC == 'true' }}
       uses: actions/upload-artifact@v4
       with: 
         name: sbom_pxweb2
@@ -121,6 +135,7 @@ jobs:
           
 
     - name: SonarCloud - End 
+      if: ${{ inputs.SKIPSEC == 'true' }}
       run: | 
         dotnet-sonarscanner end ` /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           
